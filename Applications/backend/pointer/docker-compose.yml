@@ -1,0 +1,24 @@
+services:
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SenhaForte123!
+    
+    ports:
+      - "1433:1433"
+    volumes:
+      - db:/var/opt/mssql
+
+  pointer:
+    image: pointer:latest
+    build: ./
+    ports:
+      - "5000:5000"
+    command: dotnet run --urls=http://0.0.0.0:5000
+    depends_on:
+      - database
+
+volumes:
+  db:
